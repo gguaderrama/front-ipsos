@@ -1,376 +1,384 @@
-  
-import React from 'react'
-import { Switch, Route, Redirect } from "react-router-dom";
-import '../../../node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
-import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import clsx from 'clsx';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Flag from '@material-ui/icons/Flag';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import { connect } from "react-redux";
+import { withTranslate, IntlActions } from "react-redux-multilingual";
+import React, { Component, Fragment } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { useStyles } from "./styles";
 
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import clsx from "clsx";
+import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import Logo from "../../assets/IPSOS_OPERACIONES.png";
+import headLogo from "../../assets/IPSOS_404.png";
+import Badge from "@material-ui/core/Badge";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import * as actions from "../../actions";
 
-import MailIcon from '@material-ui/icons/Mail';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import CallIcon from '@material-ui/icons/CallMade';
-import CheckIcon from '@material-ui/icons/CheckBoxOutlined';
-import SmartphoneIcon from '@material-ui/icons/PhoneIphone';
-import PeopleIcon from '@material-ui/icons/People';
-import Home from '@material-ui/icons/Home';
-import SettingsIcon from '@material-ui/icons/Settings';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import HomeIcon from '@material-ui/icons/Home';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
-import GrainIcon from '@material-ui/icons/Grain';
+import { AccessAlarm, ThreeDRotation } from "@material-ui/icons";
+import { Collapse } from "@material-ui/core";
 
-import Background from '../../assets/Capa_38.png';
-import Backgrounds from '../../assets/ico.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons'
-import { Icon } from '@material-ui/core';
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
 
-const site = "Inicio"
-const mail = "christian.cadena"
-const title = "Empleados"
-const drawerWidth = 240;
-const drawerWidths = 70;
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})(props => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
-const StyledMenuItem = withStyles(theme => ({
-  root: {
-    padding: theme.spacing(1, 10),
-    '&:focus': {
-      backgroundColor: '#214490',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+
+class Admin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true,
+      itemMenu: 0,
+      expanded: false
+    };
+    this.handleOnChangeInput = this.handleOnChangeInput.bind(this);
+    this.setOpen = this.setOpen.bind(this);
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.onClickItem = this.onClickItem.bind(this);
+  }
+  componentDidMount() {
+    this.props.menuAdminFuncion(
+      this.props.translate("ADMIN.menu_presupuestos")
+    );
+  }
+  setOpen(variable) {
+    this.setState({
+      open: variable
+    });
+  }
+
+  handleDrawerOpen() {
+    this.setOpen(!this.state.open);
+  }
+  handleDrawerClose() {
+    this.setOpen(false);
+  }
+
+  handleOnChangeInput(e, panel) {
+    console.log("ingresa aqui");
+    let value = e.target.value;
+    this.setState({ valueSelect: value }, () => {
+      console.log(value, "dealersOverallTotal1");
+    });
+    if (value === "es" || value === "en") {
+      this.props.setLanguage(value);
+    }
+  }
+  onClickItem(itemMenuId) {
+    console.log("wjenfjewngjewngjn");
+    this.setState({
+      itemMenu: itemMenuId
+    });
+  }
+
+  handleChange(event, newExpanded, panel) {
+    this.setExpanded(newExpanded ? panel : false);
+  }
+
+  setExpanded(value) {
+    this.setState({
+      expanded: value
+    });
+  }
+
+  render() {
+    const ExpansionPanel = withStyles({
+      root: {
+        border: "none",
+        boxShadow: "none",
+        "&:not(:last-child)": {
+          borderBottom: 0
+        },
+        "&:before": {
+          display: "none"
+        },
+        "&$expanded": {
+          margin: "auto"
+        }
       },
-    },
-  },
-}))(MenuItem);
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  roots: {
-    padding: theme.spacing(1, 0),
-    marginLeft:'75%',
-    display:'inlineblock',
-  },
-  paper: {
-    padding: theme.spacing(1, 2),
-  },
-  palette: {
-      // color: 'default',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    marginLeft:drawerWidths,
-    width: `calc(100% - ${drawerWidths}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  link: {
-    display: 'flex',
-  },
-  icon: {
-    marginRight: theme.spacing(0.5),
-    width: 20,
-    height: 20,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
+      expanded: {}
+    })(MuiExpansionPanel);
 
-export default function MiniDrawer() {
-  const classes = useStyles();
-  var abrir=false;
-  var foto=Backgrounds;
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  
-  function handleClick(event) {
-    setAnchorEl(event.currentTarget);
-  }
+    const ExpansionPanelSummary = withStyles({
+      root: {
+        color: "#37474f",
+        padding: "0px",
+        backgroundColor: "rgba(0, 0, 0, .03)",
+        borderBottom: "none",
+        marginBottom: -1,
+        // minHeight: 56,
+        "&$expanded": {
+          minHeight: 56
+        }
+      },
+      content: {
+        margin: "0px !important",
+        "&$expanded": {
+          margin: "12px 0"
+        }
+      },
+      expanded: {}
+    })(MuiExpansionPanelSummary);
 
-  function handleClose() {
-    setAnchorEl(null);
-  }
-  function handleDrawerOpen() {
-    setOpen(true);
-    document.getElementById('mostrarOcultar').style.display="none";
-    document.getElementById('mostrarOcultare').style.display="block";
-    var img = document.getElementsByClassName("img");
-    img.className.remove("img");
-    img.className.add("image");
+    const ExpansionPanelDetails = withStyles(theme => ({
+      root: {
+        padding: theme.spacing(2)
+      }
+    }))(MuiExpansionPanelDetails);
 
-console.log(img);
-  }
-  function handleDrawerClose() {
-    setOpen(false);
-    document.getElementById('mostrarOcultar').style.display="block";
-    document.getElementById('mostrarOcultare').style.display="none";
-    // let image = document.getElementsByClassName("image").width;
-    // console.log(image, 'este es el valor de la imagen ')
-
-   image.className.remove("image");
-   image.className.add("img");
-
-console.log(image);
-  }
-
-  console.log('este es el valor de la imagen ')
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar className="navbar">
-        <Grid id="mostrarOcultar" container="true" >
-          <IconButton
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
+    // console.log(this.props.menu_admin);
+    const { classes } = this.props;
+    const { open } = this.state;
+    const { menu_admin, history } = this.props;
+    const MaterialIcon = (icon, boolean = null) => {
+      switch (icon) {
+        case "InboxIcon":
+          return (
+            <InboxIcon
+              style={
+                boolean === true ? { color: "black" } : { fontWeight: "normal" }
+              }
+            />
+          );
+        case "MailIcon":
+          return (
+            <MailIcon
+              style={
+                boolean === true ? { color: "black" } : { fontWeight: "normal" }
+              }
+            />
+          );
+        default:
+          return null;
+      }
+    };
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          style={{ background: "#00AFA9" }}
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+            [classes.AppBarClosed]: !open
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open
+              })}
+            >
               <MenuIcon />
-             </IconButton>
-        </Grid>
-        <Grid id="mostrarOcultare" container="true"   edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: close,
-            })} >
-          <IconButton onClick={handleDrawerClose} >
-               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <MenuIcon />}
-          </IconButton>
-        </Grid>
-            <IconButton className="mis">
-              <Badge badgeContent={4} color="primary">
-              <MailIcon/>
-              </Badge>
             </IconButton>
-          <IconButton>
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>    
-            <IconButton>
-              <Badge badgeContent={1} color="secondary">
-                <Flag />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={handleClick}>
-            <FontAwesomeIcon icon={ faUserCircle} />
-            </IconButton>
-            <div>
-            
-      <Typography
-        aria-controls="customized-menu"
-        aria-haspopup="true"
-        // variant="contained"
-      >
-        {mail}
-      </Typography>
-      <StyledMenu
-        id="customized-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <div className="container-correo">
-        <StyledMenuItem >
-          <ListItemText primary={mail} />
-        </StyledMenuItem>
-        </div>
-        <Button
-        variant="contained"
-        // color="secondary"
-        container ="true"
-         spacing={24}
-      >
-       Opciones
-      </Button>
-      <Link href="/" className="btn-exit" >
-        <IconButton  >
-          <FontAwesomeIcon icon={ faSignInAlt} />
-        </IconButton>
-      </Link>
-    </StyledMenu>
-    </div>
-          
-            <IconButton>
-                <SettingsIcon />
-            </IconButton>  
-      </Toolbar>
-        
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                // aria-controls={menuId}
+                aria-haspopup="true"
+                // onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="show more"
+                // aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                // onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-        open={open}
-      >
-        <img className="img" src={Background} id="ipsos" />
-        <List>
-        <ListItem button>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <CheckIcon />
-          </ListItemIcon>
-          <ListItemText primary="Estudios" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <SmartphoneIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dispositivos" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <CallIcon />
-          </ListItemIcon>
-          <ListItemText primary="Reportes" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <PeopleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Nóminas" />
-        </ListItem>       
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />   
-      <div className="container-dashboard">
-         <Toolbar>
-         <Grid >
-          <Typography variant="h6">
-           {title}
-          </Typography> 
-         </Grid>    
-           <Paper elevation={0} className={classes.roots}>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-              <Link href="/"  className={classes.link}>
-                <HomeIcon  className={classes.icon} />
-                Inicio
-              </Link>
-              <Typography  color="textPrimary" >
-                RH
-              </Typography>  
-            </Breadcrumbs> 
-           </Paper>
-          </Toolbar> 
-        
-      </div> 
-      </main>
-    </div>
-  );
+            [classes.drawerClose]: !open
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open
+            })
+          }}
+          open={open}
+        >
+          <div className={classes.toolbar}>
+            {!open ? (
+              <img
+                src={headLogo}
+                alt="Logo"
+                width="80%"
+                style={{ margin: "auto" }}
+              />
+            ) : (
+              <img
+                src={Logo}
+                alt="Logo"
+                width="50%"
+                style={{ margin: "auto" }}
+              />
+            )}
+          </div>
+          <Divider />
+          <List className="menuItemDone">
+            <div>
+              <List style={{ width: "100%" }} className={classes.list}>
+                <ExpansionPanel className={classes.pannel} className={classes.list}>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                  >
+                    <List component="nav" aria-label="main mailbox folders">
+                      <ListItem button    style={{ margin: "auto" }}>
+                        <ListItemIcon>
+                          <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Inbox" />
+                      </ListItem>
+                    </List>
+                    {/* <Typography className={classes.heading}>Expansion Panel 2</Typography> */}
+                  </ExpansionPanelSummary>
+                  {menu_admin &&
+              menu_admin.map((text, index) => (
+                    <ExpansionPanelDetails  key={index}>
+                <ListItem
+                  button
+                  key={index}
+                  onClick={() => {
+                    history.push(text.path);
+                    this.onClickItem(text.id);
+                  }}
+                >
+                  <ListItemIcon>
+                    {text.id === this.state.itemMenu
+                      ? MaterialIcon(text.icon, true)
+                      : MaterialIcon(text.icon)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        className={classes.menuItem}
+                        style={
+                          text.id === this.state.itemMenu
+                            ? { fontWeight: "bold" }
+                            : { fontWeight: "normal" }
+                        }
+                      >
+                        {text.name}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              </ExpansionPanelDetails>
+              ))}
+                </ExpansionPanel>
+              </List>
+            </div>
+            <div />
+
+            {menu_admin &&
+              menu_admin.map((text, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={() => {
+                    history.push(text.path);
+                    this.onClickItem(text.id);
+                  }}
+                >
+                  <ListItemIcon>
+                    {text.id === this.state.itemMenu
+                      ? MaterialIcon(text.icon, true)
+                      : MaterialIcon(text.icon)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        className={classes.menuItem}
+                        style={
+                          text.id === this.state.itemMenu
+                            ? { fontWeight: "bold" }
+                            : { fontWeight: "normal" }
+                        }
+                      >
+                        {text.name}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+          </List>
+          <Divider />
+        </Drawer>
+      </div>
+    );
+  }
 }
+const mapStateToProps = state => {
+  return {
+    actions: { ...actions },
+    menu_admin: state.MenuAdmin.menu
+  };
+};
+
+const mapDispatch = (dispatch, props) => {
+  return {
+    setLanguage: event => dispatch(IntlActions.setLocale(event)),
+    menuAdminFuncion: value => dispatch(actions.menu_admin(value))
+  };
+};
+
+// connect(mapStateToProps)
+
+export default connect(
+  // { ...actions },
+  mapStateToProps,
+  mapDispatch
+)(withStyles(useStyles)(withTranslate(Admin)));

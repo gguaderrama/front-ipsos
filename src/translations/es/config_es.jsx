@@ -1,10 +1,16 @@
-
-
 // Objects Interface
-import Loging from './login/login';
-import Dashboard from './dashboard/dashboard';
+import Loging from "./login/login";
+import admin from "./admin";
 export default Object.freeze({
-        LOCALE: 'es',
-        LOGIN : Loging,
-        DASHBOARD : Dashboard 
+  locale: "zh",
+  messages: {
+    LOGIN: {
+      email: "Correo",
+      password: "Clave",
+      button_message: "INGRESA",
+      remember_user: "Recordar Usuario"
+    },
+    ADMIN: admin,
+    hello: "你好！你好吗"
+  }
 });

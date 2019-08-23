@@ -513,12 +513,14 @@ const DatatablePage = () => {
       <MiniDrawer>
  
     </MiniDrawer>
+   <div className="tabla">
     <MDBDataTable
-      striped
-      bordered
-      small
-      data={data}
-    />
+        striped
+        bordered
+        medium
+        data={data}
+      />
+   </div>
     </Fragment>
    
   );

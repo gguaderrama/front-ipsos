@@ -4,10 +4,6 @@ export const styles = theme => ({
         body: {
           backgroundColor: theme.palette.common.white,
           backgroundImage: `url(${Background})`,
-          // backgroundPosition: 'center',
-          // backgroundSize: 'cover',
-          // backgroundRepeat: 'no-repeat',
-          // height: 'auto'
           maxHeight: '200px',
           [theme.breakpoints.up('md')]: {
               backgroundSize: 'cover',
