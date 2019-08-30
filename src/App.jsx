@@ -5,7 +5,6 @@ import Login from "./components/login";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Admin from "./components/admin";
 import Empleado from "./components/empleados";
-import Tabla from "./components/tabla";
 import "./styles/less/style.less";
 import Backgrounds from "../src/assets/IPSOS_404.png";
 import Budgets from "./components/budgets";

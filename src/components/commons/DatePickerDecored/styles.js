@@ -1,16 +1,23 @@
 export const styles = theme => ({
-    formControl: {},
-    textField: {
-      margin: '0 0 5px',
-      borderRadius: '6px',
-      fontSize: '15.5px',
-      color : '#e8e8e8',
-      fontFamily: `"Roboto", "Helvetica", "Arial", "sans-serif"` 
+    formControl: {
+      marginTop: '-7px !important',
+      // marginTop: '-32px',
+      // backgroundColor: 'black'
+    },
+    root: {
+      marginTop: '-30px !important',
+      backgroundColor: 'black'
     },
     notchedOutline : {
       borderWidth: "1px",
       borderColor: "#9c9c9c !important"
-    }, 
+    },     
+  label: {
+       margin: '0px !important'
+   },
+    textField: {
+      margin: '0 0 5px',
+    },
     closeButton: {},
     button: {},
     pre: {},
@@ -18,17 +25,9 @@ export const styles = theme => ({
     divButttonContainer: {},
     //
     textFieldFilled: {
-      fontSize: '17px',
-      borderRadius: '6px',
       backgroundColor: '#fdfdfd',
       border: 'solid 1px #9B9B9B',
-      color : '#e8e8e8',
       borderRadius: 4,
-      fontFamily: "Roboto"
-    },
-    'textarea::placeholder': {
-        textOverflow: 'ellipsis !important',
-        color: 'blue'
     },
     root: {
       borderRadius: 4,

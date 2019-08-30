@@ -3,6 +3,10 @@ export const styles = theme => ({
     textField: {
       margin: '0 0 5px',
     },
+    notchedOutline : {
+      borderWidth: "1px",
+      borderColor: "#9c9c9c !important"
+    }, 
     closeButton: {},
     button: {},
     pre: {},
@@ -19,6 +23,9 @@ export const styles = theme => ({
       '&$disabled': {
         borderRadius: 4
       }
+    },
+    dense: {
+      marginTop: 19,
     },
     disabled: {},
   })

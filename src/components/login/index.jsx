@@ -29,8 +29,7 @@ class Login extends Component {
   }
 
   handleOnChangeInput(e, panel) {
-    console.log('ingresa aqui')
-    let value = e.target.value
+   let value = e.target.value
    this.setState({ valueSelect: value  }, () => {
       console.log( value , 'dealersOverallTotal1');
     }); 
@@ -39,7 +38,6 @@ class Login extends Component {
     }
   }
   render(){
-    console.log(this.state, 'el valor del estado')
     const {
       classes 
     } = this.props;

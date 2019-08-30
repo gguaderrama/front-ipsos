@@ -5,19 +5,21 @@ import Admin from "../../admin";
 import { useStyles } from "./estilos/stylebrief";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import TabsComponent from '../../commons/tabs'
+import TabsComponent from '../../commons/tabs/'
 import tabsSpread  from "./interfaces/tabsSpread";
-
+import { Button } from '@material-ui/core';
 class Brief extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: true,
       value: 0,
-      activeTabIndex: 0
+      activeTabIndex: 0,
   };
+  
   }
 componentDidMount() {}
+
  render() {
     const { classes } = this.props;
    return (
@@ -25,8 +27,19 @@ componentDidMount() {}
         <Admin {...this.props} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          <Button
+  variant="contained"
+  component="label"
+>
+  Upload File
+  <input
+    type="file"
+    // style={{ display: "none" }}
+  />
+</Button>
+          <div><h2>Brief para cotización #5151515-B1</h2></div>
           <Paper className={classes.root}>
-              <TabsComponent tabsSpread = {tabsSpread({...this.props})}/>
+              <TabsComponent tabsSpread = {tabsSpread({...this.props })}  />
           </Paper>
         </main>
       </div>

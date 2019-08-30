@@ -173,7 +173,7 @@ class Admin extends Component {
       }
     };
     return (
-      <div className={classes.root}>
+      <div >
         <CssBaseline />
         <AppBar
           style={{ background: "#00AFA9" }}
@@ -283,10 +283,9 @@ class Admin extends Component {
                         <ListItemText primary="Inbox" />
                       </ListItem>
                     </List>
-                    {/* <Typography className={classes.heading}>Expansion Panel 2</Typography> */}
                   </ExpansionPanelSummary>
                   {menu_admin &&
-              menu_admin.map((text, index) => (
+              menu_admin.map((text , index) => (
                     <ExpansionPanelDetails  key={index}>
                 <ListItem
                   button

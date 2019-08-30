@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Icon from "@material-ui/core/Icon";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import TextField from '@material-ui/core/TextField';
 
 // Styles
 import { styles } from "./styles";
@@ -15,11 +15,11 @@ const TextAreaDecoredMain = props => {
   const { classes = { formControl: "" } } = props;
   const {
     variant = "standard",
-    multiline = false,
+    multiline = true,
     disabled = false,
     required = false,
     label = "Name label",
-    value = "Value",
+    value = "",
     handleOnChange = e => console.log("TextFieldDecored:>", e),
     inputProps = {},
     InputLabelProps = {},
@@ -34,23 +34,30 @@ const TextAreaDecoredMain = props => {
     defaultValue = false,
     // Redux form props
     //meta = {},
+    name = '',
     style
   } = props;
   //
 
   return (
     <FormControl className={classes.formControl} error={error} style={style}>
-      <TextareaAutosize
-        aria-label={placeholder}
-        onChange={handleOnChange}
-        rows={rows}
-        placeholder={placeholder}
-        className={
-          variant === "filled" ? classes.textFieldFilled : classes.textField
-        }
-        disabled={disabled}
-        // defaultValue={defaultValue}
+       <TextField
+        id="outlined-multiline-flexible"
+        label={label}
+        multiline
+        rowsMax="4"
         value={value}
+        name ={name}
+        onChange={handleOnChange}
+        className={classes.textField}
+        margin="normal"
+        InputProps={{
+          classes: {
+            notchedOutline: classes.notchedOutline
+          }
+        }}
+        variant="outlined"
+        rows={rows}
       />
       <FormHelperText style={{ marginTop: "0px" }}>
         {texto}

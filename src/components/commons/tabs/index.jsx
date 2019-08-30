@@ -23,7 +23,6 @@ class TabsComponent extends Component {
   handleChange(newValue) {
     this.setValue(newValue);
   }
-
   setValue(newValue) {
     this.setState({
       activeTabIndex: newValue
@@ -40,8 +39,6 @@ class TabsComponent extends Component {
   render() {
     const { classes } = this.props;
     const { tabsComponents } = this.state;
-    console.log(tabsComponents);
-
     const TabPanel = props => {
       const { children, value, index, ...other } = props;
 
@@ -64,9 +61,16 @@ class TabsComponent extends Component {
       <div>
         <AppBar position="static" color="default">
           <Tabs
+            TabIndicatorProps={{
+              style: {
+                top: 0,
+                height: 3,
+                backgroundColor: "#00AFA9"
+              }
+            }}
             value={activeTabIndex}
             indicatorColor="primary"
-            textColor="primary"
+            // textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
@@ -74,7 +78,9 @@ class TabsComponent extends Component {
             {tabsComponents &&
               tabsComponents[0] &&
               tabsComponents[0].tabs.map((text, index) => (
-                <Tab
+                <Tab  style = {{    color: '#636363',
+                   fontWeight: '550'}}
+                  disabled = { index === activeTabIndex ? true : false}
                   label={text.name}
                   key={index}
                   onClick={event => this.handleChange(index)}
@@ -86,7 +92,7 @@ class TabsComponent extends Component {
         {tabsComponents &&
           tabsComponents[0] &&
           tabsComponents[0].component.map((text, index) => (
-            <TabPanel key={index} value={activeTabIndex} index={index}>
+            <TabPanel key={index} value={activeTabIndex} index={index} >
               {text.component}
             </TabPanel>
           ))}

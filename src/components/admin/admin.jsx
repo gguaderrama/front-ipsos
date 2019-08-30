@@ -40,7 +40,7 @@ export default function MiniDrawer() {
   }
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <AppBar
         style={{ background: '#00AFA9' }}

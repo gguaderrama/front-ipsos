@@ -4,8 +4,10 @@ export const useStyles = theme => ({
         padding: theme.spacing(3),
       },
     root: {
+        // border: '1px solid #bdc1c4',
         padding: theme.spacing(3, 2),
-        height: '100%'
+        height: '100%',
+        border: '1px solid #bdc1c4'
       },
    });
   
